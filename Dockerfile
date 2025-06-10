@@ -1,5 +1,5 @@
 # Use the official Alpine image as a base
-FROM node:19-alpine
+FROM node:18-alpine
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -20,7 +20,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 RUN chown -R appuser:appgroup /usr/src/app
 
 # Switch to the non-root user
-USER appuser
+USER root
 
 # Expose the port the app runs on
 EXPOSE 3000
