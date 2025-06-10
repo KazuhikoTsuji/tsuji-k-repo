@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SCAN_PATH: "." # Set the relative path in the repo to build the image from
-      TAG: "quay.io/fedora/fedora:41" # Set the tag to use for the image
+      TAG: "quay.io/fedora/fedora@sha256:d76e0f235201d3cf611bca9414d78e32e4ee128ef78b77fac7fdefd267242b34" # Set the tag to use for the image
       POLICY: "Default vulnerabilities policy" # Set the desired Wiz CLI policy to use
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
