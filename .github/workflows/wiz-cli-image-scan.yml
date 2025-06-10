@@ -37,5 +37,11 @@ jobs:
       - name: Run wiz-cli docker image scan
         run: ./wizcli docker scan --image $TAG --policy "$POLICY"
 
+      - name: Push image to Docker Hub
+        run: docker push $TAG
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Fetch digest of Docker image for Graph enrichment
         run: ./wizcli docker tag --image $TAG
