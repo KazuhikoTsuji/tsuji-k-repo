@@ -29,20 +29,20 @@ jobs:
           cd $SCAN_PATH
           docker build . --tag "$IMAGE" # Configure to fit the params you use to build your image
 
-      # - name: Download Wiz CLI
-      #   run: curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
+      - name: Download Wiz CLI
+        run: curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
 
-      # - name: Authenticate to Wiz
-      #   run: ./wizcli auth --id "$WIZ_CLIENT_ID" --secret "$WIZ_CLIENT_SECRET"
-      #   env:
-      #     WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
-      #     WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+      - name: Authenticate to Wiz
+        run: ./wizcli auth --id "$WIZ_CLIENT_ID" --secret "$WIZ_CLIENT_SECRET"
+        env:
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
 
-      # - name: Run wiz-cli docker image scan
-      #   run: ./wizcli docker scan --image "$IMAGE" --policy "$POLICY"
+      - name: Run wiz-cli docker image scan
+        run: ./wizcli docker scan --image "$IMAGE" --policy "$POLICY"
 
-      # - name: Fetch digest of Docker image for Graph enrichment
-      #   run: ./wizcli docker tag --image $IMAGE
+      - name: Fetch digest of Docker image for Graph enrichment
+        run: ./wizcli docker tag --image $IMAGE
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
