@@ -1,5 +1,5 @@
 name: "wiz-cli-image-scan"
-on: [pull_request]
+# on: [pull_request]
 
 jobs:
   wiz-cli-image-scan:
