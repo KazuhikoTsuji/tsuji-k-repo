@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push image to Docker Hub
-        run: docker push $TAG:$(date +%s)
+        run: docker push $TAG
 
       - name: Fetch digest of Docker image for Graph enrichment
         run: ./wizcli docker tag --image $TAG
