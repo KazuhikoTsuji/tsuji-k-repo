@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SCAN_PATH: "." # Set the relative path in the repo to build the image from
-      TAG: "docker.io/kazuhikotsuji/prime_motors:$(date +%s)" # Set the tag to use for the image
+      REPO: "docker.io/kazuhikotsuji/my-app" # Set the name of the repository to use for the image
       POLICY: "tsuji-k_cicd_vulnerability" # Set the desired Wiz CLI policy to use
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -23,7 +23,11 @@ jobs:
       # It's possible to skip this step if this job is scheduled after an image-build job.
       # If that's the case, also set "Run wiz CLI docker image scan" step accordingly
       - name: Build the Docker image
-        run: cd $SCAN_PATH && docker build . --tag $TAG # Configure to fit the params you use to build your image
+        run: |
+          IMAGE="$REPO:$(date +%s)"
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+          cd $SCAN_PATH
+          docker build . --tag "$IMAGE" # Configure to fit the params you use to build your image
 
       - name: Download Wiz CLI
         run: curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
@@ -35,7 +39,16 @@ jobs:
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
 
       - name: Run wiz-cli docker image scan
-        run: ./wizcli docker scan --image $TAG --policy "$POLICY"
+        run: ./wizcli docker scan --image "$IMAGE" --policy "$POLICY"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push image to Docker Hub
+        run: docker push $IMAGE
 
       - name: Fetch digest of Docker image for Graph enrichment
-        run: ./wizcli docker tag --image $TAG
+        run: ./wizcli docker tag --image $IMAGE
