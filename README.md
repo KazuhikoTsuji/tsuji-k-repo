@@ -1,5 +1,5 @@
 # Readme
-Application code used for the github wiz halftime demo
+Application code used for my-app.
 
 You will need gulp installed to build this
 
