@@ -23,7 +23,11 @@ jobs:
       # It's possible to skip this step if this job is scheduled after an image-build job.
       # If that's the case, also set "Run wiz CLI docker image scan" step accordingly
       - name: Build the Docker image
-        run: cd $SCAN_PATH && IMAGE=$REPO:$(date +%s) && docker build . --tag $IMAGE # Configure to fit the params you use to build your image
+        run: |
+          IMAGE="$REPO:$(date +%s)"
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+          cd $SCAN_PATH
+          docker build . --tag "$IMAGE" # Configure to fit the params you use to build your image
 
       - name: Download Wiz CLI
         run: curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
@@ -35,7 +39,7 @@ jobs:
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
 
       - name: Run wiz-cli docker image scan
-        run: echo $IMAGE && ./wizcli docker scan --image "$IMAGE" --policy "$POLICY"
+        run: ./wizcli docker scan --image "$IMAGE" --policy "$POLICY"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
