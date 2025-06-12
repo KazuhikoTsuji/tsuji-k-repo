@@ -1,5 +1,5 @@
 name: "container-image-build"
-# on: [pull_request]
+on: [pull_request]
 
 jobs:
   container-image-build:
@@ -24,7 +24,6 @@ jobs:
         run: |
           IMAGE="$REPO:$(date +%s)"
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
-          cd $SCAN_PATH
           docker build . --tag "$IMAGE" # Configure to fit the params you use to build your image
 
       - name: Log in to Docker Hub
