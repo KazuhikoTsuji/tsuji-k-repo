@@ -1,5 +1,5 @@
 name: "container-image-build"
-on: [pull_request]
+# on: [pull_request]
 
 jobs:
   container-image-build:
